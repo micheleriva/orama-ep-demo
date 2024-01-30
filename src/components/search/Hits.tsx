@@ -1,25 +1,18 @@
 import NoResults from "./NoResults";
 import HitComponent from "./Hit";
-import { useProducts } from "./ProductsProvider";
+import { useOramaHits } from "../../lib/orama";
 
 export default function Hits(): JSX.Element {
-  const { page } = useProducts();
+  const oramaHits = useOramaHits()
 
-  if (!page) {
-    return <NoResults displayIcon={false} />;
-  }
-
-  if (page.data.length) {
+  if (oramaHits?.hits.length) {
     return (
       <div className="grid max-w-[80rem] grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-        {page.data.map((hit) => {
-          const {
-            response: { id },
-          } = hit;
+        {oramaHits?.hits.map((hit: any) => {
           return (
             <div
               className="list-none justify-items-stretch rounded-lg animate-fadeIn"
-              key={id}
+              key={hit.id}
             >
               <HitComponent hit={hit} />
             </div>
@@ -28,5 +21,6 @@ export default function Hits(): JSX.Element {
       </div>
     );
   }
+
   return <NoResults displayIcon={false} />;
 }

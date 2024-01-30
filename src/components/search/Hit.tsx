@@ -4,28 +4,16 @@ import StrikePrice from "../product/StrikePrice";
 import { EP_CURRENCY_CODE } from "../../lib/resolve-ep-currency-code";
 import Image from "next/image";
 import { EyeSlashIcon } from "@heroicons/react/24/solid";
-import {
-  ShopperProduct,
-} from "@elasticpath/react-shopper-hooks";
+import { Result } from "@orama/orama"
 
 export default function HitComponent({
   hit,
 }: {
-  hit: ShopperProduct;
+  hit: Result<any>;
 }): JSX.Element {
-  const {
-    main_image,
-    response: {
-      meta: { display_price, original_display_price },
-      attributes: { name, description },
-      id,
-    },
-  } = hit;
-
-  const ep_main_image_url = main_image?.link.href;
-
-  // const currencyPrice = ep_price?.[EP_CURRENCY_CODE];
-  const currencyPrice = display_price?.without_tax.formatted;
+  const id = hit.document.id;
+  const ep_main_image_url = hit.document.attributes.extensions?.["products(extension)"]?.image_1
+  const currencyPrice = hit.document.attributes.price?.[EP_CURRENCY_CODE];
 
   return (
     <>
@@ -39,7 +27,7 @@ export default function HitComponent({
               <Image
                 className="relative h-full w-full transition duration-300 ease-in-out group-hover:scale-105"
                 src={ep_main_image_url}
-                alt={name}
+                alt={hit.document.attributes.name}
                 fill
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 style={{
@@ -56,22 +44,24 @@ export default function HitComponent({
           <div className="flex h-full flex-col gap-2 rounded-b-lg border-b border-l border-r p-4">
             <div className="h-full">
               <Link href={`/products/${id}`} passHref legacyBehavior>
-                <h3 className="text-sm font-bold">{name}</h3>
+                <h3 className="text-sm font-bold">{hit.document.attributes.name}</h3>
               </Link>
               <span className="mt-2 line-clamp-6 text-xs font-medium leading-5 text-gray-500">
-                {description}
+                {hit.document.attributes.name}
               </span>
             </div>
             <div>
               {currencyPrice && (
                 <div className="mt-1 flex items-center">
                   <Price
-                    price={display_price?.without_tax.formatted}
+                    price={(currencyPrice.amount / 100).toString()}
                     currency={EP_CURRENCY_CODE}
                   />
-                  {original_display_price?.without_tax.formatted && (
+                  {currencyPrice.sale_prices && (
                     <StrikePrice
-                      price={original_display_price?.without_tax.formatted}
+                      price={
+                        currencyPrice.sale_prices.original_price.formatted_price
+                      }
                       currency={EP_CURRENCY_CODE}
                       size="text-lg"
                     />

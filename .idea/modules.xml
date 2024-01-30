@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/orama-ep-demo.iml" filepath="$PROJECT_DIR$/.idea/orama-ep-demo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../orama-ep-demo-algolia/.idea/orama-ep-demo-algolia.iml" filepath="$PROJECT_DIR$/../orama-ep-demo-algolia/.idea/orama-ep-demo-algolia.iml" />
     </modules>
   </component>
 </project>

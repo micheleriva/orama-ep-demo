@@ -3,6 +3,7 @@ import { useProducts } from "./ProductsProvider";
 import clsx from "clsx";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useOramaHits } from "../../lib/orama"
 
 function calculateTotalPages(totalItems: number, limit: number): number {
   // Ensure both totalItems and limit are positive integers
@@ -14,20 +15,15 @@ function calculateTotalPages(totalItems: number, limit: number): number {
 }
 
 export const Pagination = (): JSX.Element => {
-  const { page } = useProducts();
+  const { page } = useProducts()
+  const oramaHits = useOramaHits()
   const pathname = usePathname();
 
-  if (!page) {
+  if (!oramaHits) {
     return <></>;
   }
 
-  const {
-    meta: {
-      results: { total: totalResults = 0 },
-    },
-  } = page;
-
-  const totalPages = calculateTotalPages(totalResults, page.meta.page.limit);
+  const totalPages = calculateTotalPages(oramaHits.count, page.meta.page.limit);
 
   return (
     <div className={clsx("block")}>

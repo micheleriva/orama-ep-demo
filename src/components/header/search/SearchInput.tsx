@@ -1,16 +1,13 @@
 "use client"
-import React, { ChangeEvent, Suspense, useState, ReactElement, ReactNode, useEffect } from "react"
-import { OramaClient } from "@oramacloud/client"
+
+import React, { Suspense, useState, useEffect } from "react"
 import Link from "next/link"
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid"
+import { orama } from "../../../lib/orama"
 
-export default function SearchInput({ api_key, endpoint }: { api_key: string, endpoint: string }): JSX.Element {
+export default function SearchInput(): JSX.Element {
   const [results, setResults] = useState<any>([])
   const [searchTerm, setSearchTerm] = useState<string>("")
-  const client = new OramaClient({
-    endpoint,
-    api_key
-  })
 
   const onResultClick = () => {
     setSearchTerm("")
@@ -25,10 +22,11 @@ export default function SearchInput({ api_key, endpoint }: { api_key: string, en
       return
     }
     const search = async () => {
-      const results = await client.search({
+      const results = await orama.search({
         term: searchTerm,
         mode: "fulltext",
-        limit: 5
+        limit: 5,
+        threshold: 0
       })
 
       setResults(results?.hits ?? [])
@@ -43,7 +41,7 @@ export default function SearchInput({ api_key, endpoint }: { api_key: string, en
       className="o__input"
       type="text"
       onChange={e => setSearchTerm(e.target.value)} value={searchTerm}
-      placeholder={"Start typing to search"}
+      placeholder="Start typing to search"
     />
     {results.length > 0 && <ul className="o__results">
 			<Suspense fallback={<div>Loading...</div>}>

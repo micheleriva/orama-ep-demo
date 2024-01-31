@@ -5,7 +5,7 @@ import Link from "next/link"
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid"
 import { orama } from "../../../lib/orama"
 
-export default function SearchInput(): JSX.Element {
+export default function OramaSearchInput(): JSX.Element {
   const [results, setResults] = useState<any>([])
   const [searchTerm, setSearchTerm] = useState<string>("")
 
@@ -26,8 +26,13 @@ export default function SearchInput(): JSX.Element {
         term: searchTerm,
         mode: "fulltext",
         limit: 5,
-        threshold: 0
-      })
+        threshold: 0,
+        returning: [
+          'id',
+          'attributes.name',
+          'attributes.extensions.products(extension).image_1',
+        ],
+      } as any)
 
       setResults(results?.hits ?? [])
     }

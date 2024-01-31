@@ -45,3 +45,5 @@ yarn-error.log*
 /localStorage
 
 test-results
+
+.idea

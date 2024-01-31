@@ -1,10 +1,10 @@
 import Link from "next/link";
 import Price from "../product/Price";
-import StrikePrice from "../product/StrikePrice";
 import { EP_CURRENCY_CODE } from "../../lib/resolve-ep-currency-code";
 import Image from "next/image";
 import { EyeSlashIcon } from "@heroicons/react/24/solid";
 import { Result } from "@orama/orama"
+import { CurrenciesFormatter } from "../../lib/currency";
 
 export default function HitComponent({
   hit,
@@ -14,6 +14,7 @@ export default function HitComponent({
   const id = hit.document.id;
   const ep_main_image_url = hit.document.attributes.extensions?.["products(extension)"]?.image_1
   const currencyPrice = hit.document.attributes.price?.[EP_CURRENCY_CODE];
+  const formattedPrice = currencyPrice ? CurrenciesFormatter[EP_CURRENCY_CODE].format(currencyPrice.amount / 100) : ""
 
   return (
     <>
@@ -54,10 +55,9 @@ export default function HitComponent({
               {currencyPrice && (
                 <div className="mt-1 flex items-center">
                   <Price
-                    price={(currencyPrice.amount / 100).toString()}
-                    currency={EP_CURRENCY_CODE}
+                    price={formattedPrice}
                   />
-                  {currencyPrice.sale_prices && (
+                  {/*{currencyPrice.sale_prices && (
                     <StrikePrice
                       price={
                         currencyPrice.sale_prices.original_price.formatted_price
@@ -65,7 +65,7 @@ export default function HitComponent({
                       currency={EP_CURRENCY_CODE}
                       size="text-lg"
                     />
-                  )}
+                  )}*/}
                 </div>
               )}
             </div>

@@ -19,7 +19,7 @@ export const Pagination = (): JSX.Element => {
   const oramaHits = useOramaHits()
   const pathname = usePathname();
 
-  if (!oramaHits) {
+  if (!oramaHits || !page) {
     return <></>;
   }
 

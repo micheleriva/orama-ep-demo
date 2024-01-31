@@ -4,7 +4,7 @@ import Link from "next/link";
 import CartMenu from "./cart/CartMenu";
 import EpIcon from "../icons/ep-icon";
 import { ReactElement, Suspense } from "react"
-import OramaSearch from "../search/OramaSearch"
+import OramaSearchInput from "../header/search/OramaSearchInput"
 
 const Header = (): ReactElement => {
   return (
@@ -28,7 +28,7 @@ const Header = (): ReactElement => {
         <div>
           <Suspense>
             <div>
-              <OramaSearch />
+              <OramaSearchInput />
             </div>
           </Suspense>
         </div>
